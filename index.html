@@ -1,63 +1,563 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu site - Versão 3 — corrigida</title>
+  <meta name="theme-color" content="#071b13">
+  <title>Brasileirão 2026 | Central do Futebol</title>
+
   <style>
+    :root {
+      --bg: #071b13;
+      --panel: #10271d;
+      --green: #27d879;
+      --text: #f5f8f6;
+      --muted: #9db3a6;
+      --line: #294437;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-      background: #1e9e5a;
-      padding: 1rem;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
 
-    title{
-      color:purple;
+    header {
+      padding: 24px 5%;
+      background: linear-gradient(120deg, #123c27, #071b13);
+      border-bottom: 1px solid var(--line);
     }
-    .cartao {
-      background: #fff;
+
+    .marca {
+      font-weight: 900;
+      font-size: 25px;
+    }
+
+    .marca span { color: var(--green); }
+
+    header p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 28px 5%;
+    }
+
+    .titulo-linha {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    h1 { font-size: clamp(26px, 4vw, 38px); margin: 8px 0; }
+    h2 { margin-top: 0; }
+
+    .temporada {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .destaques {
+      display: grid;
+      grid-template-columns: minmax(230px, .75fr) minmax(0, 1.8fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .lider {
+      background: linear-gradient(145deg, #1a5637, #10271d);
+      border: 1px solid #327d53;
       border-radius: 20px;
-      padding: 2.5rem;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 300px;
+    }
+
+    .etiqueta {
+      background: var(--green);
+      color: #082315;
+      border-radius: 30px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 900;
+      width: fit-content;
+    }
+
+    .escudo-grande {
+      display: block;
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin: 22px auto;
+    }
+
+    .lider h2 {
       text-align: center;
-      color: #1d1d1f;
+      font-size: 25px;
+      margin-bottom: 8px;
     }
-    .emoji { font-size: 4rem; }
-    h1 { margin: .5rem 0; color: #1e9e5a; }
-    .versao {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border-radius: 12px;
-      background: #f2f2f7;
+
+    .pontos-lider {
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .pontos-lider strong {
+      color: var(--green);
+      font-size: 32px;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .mini-stats div {
+      background: #ffffff0d;
+      border-radius: 10px;
+      padding: 12px 4px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mini-stats strong {
+      display: block;
+      font-size: 20px;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    .tabela-card {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .tabela-topo {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tabela-topo h2 {
+      font-size: 19px;
+      margin: 0;
+    }
+
+    #busca {
+      width: min(100%, 240px);
+      background: #071b13;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 11px;
+      color: white;
+      font-size: 14px;
+    }
+
+    .rolagem { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    thead { background: #19382a; }
+
+    th {
+      color: var(--muted);
+      font-size: 11px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    th:nth-child(2) { text-align: left; }
+
+    td {
+      text-align: center;
+      padding: 12px 10px;
+      border-top: 1px solid #ffffff0b;
+    }
+
+    tbody tr:hover { background: #ffffff0b; }
+    tbody tr.lider-row { background: #1b4931; }
+
+    td:nth-child(2) {
       text-align: left;
-      line-height: 1.8;
+      font-weight: bold;
     }
-    code { background: #e5e5ea; padding: 2px 6px; border-radius: 6px; }
-    footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e5e5ea; color: #6e6e73; font-size: .85rem; }
+
+    .pontos { font-size: 15px; font-weight: 900; }
+    .posicao { color: var(--muted); }
+
+    .time {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 175px;
+    }
+
+    .escudo {
+      width: 29px;
+      height: 29px;
+      object-fit: contain;
+    }
+
+    .zona-libertadores td:first-child {
+      border-left: 3px solid #35a9ff;
+    }
+
+    .zona-sula td:first-child {
+      border-left: 3px solid #f5bd43;
+    }
+
+    .zona-z4 td:first-child {
+      border-left: 3px solid #ff5c64;
+    }
+
+    .legenda {
+      padding: 16px 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .legenda span {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .cor {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .info-times { margin-top: 34px; }
+
+    .info-times > p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .times-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .time-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      color: white;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .time-card:hover {
+      border-color: var(--green);
+      background: #173528;
+    }
+
+    .time-card img {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .time-card strong { display: block; font-size: 13px; }
+    .time-card small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    #detalhes {
+      margin-top: 20px;
+      padding: 22px;
+      background: #173528;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: none;
+    }
+
+    #detalhes.aberto { display: block; }
+
+    .detalhe-cabecalho {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .detalhe-cabecalho img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+
+    #detalhes h3 { margin: 0 0 6px; }
+    #detalhes p { color: var(--muted); line-height: 1.7; }
+
+    .fonte {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 25px;
+      line-height: 1.7;
+    }
+
+    .fonte a { color: var(--green); }
+
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      padding: 24px 5%;
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+      .destaques { grid-template-columns: 1fr; }
+      .times-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 20px; }
+      main { padding: 24px 12px; }
+      .time-card { padding: 10px 7px; gap: 8px; }
+      .time-card img { width: 32px; height: 32px; }
+      .time-card strong { font-size: 11px; }
+      .time-card small { font-size: 10px; }
+    }
   </style>
 </head>
-<body>
-  <main class="cartao">
-    <div class="emoji">✅</div>
-    <h1>Versão 3 — corrigida</h1>
-    <p>O erro foi corrigido e o robô publicou de novo.</p>
 
-    <div class="versao">
-      🤖 <strong>Publicado pelo robô em:</strong> __DATA__<br>
-      🔖 <strong>Commit:</strong> <code>__COMMIT__</code><br>
-      👤 <strong>Enviado por:</strong> __AUTOR__
+<body>
+  <header>
+    <div class="marca">⚽ Central do <span>Futebol</span></div>
+    <p>Resultados, classificação e informações dos clubes brasileiros</p>
+  </header>
+
+  <main>
+    <div class="titulo-linha">
+      <div>
+        <div class="temporada">TEMPORADA 2026</div>
+        <h1>Brasileirão Série A</h1>
+      </div>
+      <span style="color:#9db3a6">Classificação do campeonato</span>
     </div>
 
-    <footer>
-      🎓 UNINOVE · Automação de Processos · DevOps<br>
-      Prof. Marcelino Dias da Silva
-    </footer>
+    <section class="destaques">
+      <article class="lider">
+        <span class="etiqueta">★ LÍDER DO CAMPEONATO</span>
+        <img id="escudoLider" class="escudo-grande" alt="Escudo do líder">
+        <h2 id="nomeLider">Palmeiras</h2>
+        <p class="pontos-lider"><strong id="pontosLider">69</strong> pontos</p>
+
+        <div class="mini-stats">
+          <div><strong id="jogosLider">32</strong>Jogos</div>
+          <div><strong id="vitoriasLider">20</strong>Vitórias</div>
+          <div><strong id="saldoLider">+34</strong>Saldo de gols</div>
+        </div>
+      </article>
+
+      <section class="tabela-card">
+        <div class="tabela-topo">
+          <h2>📊 Tabela de classificação</h2>
+          <input id="busca" type="search" placeholder="Buscar time..."
+                 aria-label="Buscar time">
+        </div>
+
+        <div class="rolagem">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Clube</th><th>PTS</th><th>J</th>
+                <th>V</th><th>E</th><th>D</th><th>GP</th>
+                <th>GC</th><th>SG</th>
+              </tr>
+            </thead>
+            <tbody id="classificacao"></tbody>
+          </table>
+        </div>
+
+        <div class="legenda">
+          <span><i class="cor" style="background:#35a9ff"></i> Libertadores</span>
+          <span><i class="cor" style="background:#f5bd43"></i> Sul-Americana</span>
+          <span><i class="cor" style="background:#ff5c64"></i> Rebaixamento</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="info-times">
+      <h2>Clubes do Brasileirão</h2>
+      <p>Selecione um clube para consultar sua posição, pontuação e estatísticas.</p>
+      <div class="times-grid" id="timesGrid"></div>
+      <article id="detalhes" aria-live="polite"></article>
+    </section>
+
+    <p class="fonte">
+      Classificação demonstrativa, com dados de referência de 26/10/2026.
+      Confira os resultados oficiais antes de publicar.
+      <br>
+      Fonte:
+      <a href="https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a"
+         target="_blank" rel="noopener noreferrer">CBF — Brasileirão Série A</a>.
+      Os escudos são carregados externamente.
+    </p>
   </main>
+
+  <footer>⚽ Central do Futebol · Brasileirão Série A 2026</footer>
+
+  <script>
+    // Dados demonstrativos. Atualize conforme a classificação oficial.
+    const clubes = [
+      {nome:"Palmeiras",sigla:"palmeiras",pts:69,j:32,v:20,e:9,d:3,gp:56,gc:22,cidade:"São Paulo, SP",desc:"Verdão alviverde."},
+      {nome:"Flamengo",sigla:"flamengo",pts:67,j:31,v:20,e:7,d:4,gp:61,gc:25,cidade:"Rio de Janeiro, RJ",desc:"Mengão rubro-negro."},
+      {nome:"Cruzeiro",sigla:"cruzeiro",pts:54,j:32,v:16,e:6,d:10,gp:51,gc:46,cidade:"Belo Horizonte, MG",desc:"Clube celeste."},
+      {nome:"Athletico-PR",sigla:"athletico-paranaense",pts:54,j:32,v:15,e:9,d:8,gp:50,gc:38,cidade:"Curitiba, PR",desc:"Furacão paranaense."},
+      {nome:"Fluminense",sigla:"fluminense",pts:51,j:32,v:14,e:9,d:9,gp:50,gc:41,cidade:"Rio de Janeiro, RJ",desc:"Tricolor das Laranjeiras."},
+      {nome:"Atlético-MG",sigla:"atletico-mineiro",pts:50,j:31,v:14,e:8,d:9,gp:42,gc:35,cidade:"Belo Horizonte, MG",desc:"Galo mineiro."},
+      {nome:"Bahia",sigla:"bahia",pts:50,j:32,v:13,e:11,d:8,gp:45,gc:40,cidade:"Salvador, BA",desc:"Tricolor de Aço."},
+      {nome:"Santos",sigla:"santos",pts:46,j:32,v:12,e:10,d:10,gp:49,gc:47,cidade:"Santos, SP",desc:"Peixe da Vila Belmiro."},
+      {nome:"São Paulo",sigla:"sao-paulo",pts:43,j:32,v:12,e:7,d:13,gp:37,gc:36,cidade:"São Paulo, SP",desc:"Tricolor paulista."},
+      {nome:"Red Bull Bragantino",sigla:"red-bull-bragantino",pts:41,j:32,v:11,e:8,d:13,gp:39,gc:38,cidade:"Bragança Paulista, SP",desc:"Massa Bruta."},
+      {nome:"Botafogo",sigla:"botafogo",pts:39,j:32,v:10,e:9,d:13,gp:44,gc:51,cidade:"Rio de Janeiro, RJ",desc:"Alvinegro carioca."},
+      {nome:"Coritiba",sigla:"coritiba",pts:39,j:31,v:10,e:9,d:12,gp:38,gc:49,cidade:"Curitiba, PR",desc:"Coxa-branca."},
+      {nome:"Vasco",sigla:"vasco",pts:38,j:31,v:10,e:8,d:13,gp:39,gc:45,cidade:"Rio de Janeiro, RJ",desc:"Gigante da Colina."},
+      {nome:"Vitória",sigla:"vitoria",pts:38,j:32,v:10,e:8,d:14,gp:35,gc:46,cidade:"Salvador, BA",desc:"Leão da Barra."},
+      {nome:"Mirassol",sigla:"mirassol",pts:37,j:32,v:9,e:10,d:13,gp:37,gc:45,cidade:"Mirassol, SP",desc:"Leão do interior."},
+      {nome:"Internacional",sigla:"internacional",pts:35,j:32,v:8,e:11,d:13,gp:36,gc:40,cidade:"Porto Alegre, RS",desc:"Colorado gaúcho."},
+      {nome:"Corinthians",sigla:"corinthians",pts:33,j:32,v:8,e:9,d:15,gp:34,gc:42,cidade:"São Paulo, SP",desc:"Timão alvinegro."},
+      {nome:"Grêmio",sigla:"gremio",pts:31,j:31,v:7,e:10,d:14,gp:34,gc:44,cidade:"Porto Alegre, RS",desc:"Tricolor gaúcho."},
+      {nome:"Remo",sigla:"remo",pts:26,j:32,v:5,e:11,d:16,gp:34,gc:50,cidade:"Belém, PA",desc:"Leão Azul."},
+      {nome:"Chapecoense",sigla:"chapecoense",pts:21,j:31,v:4,e:9,d:18,gp:32,gc:63,cidade:"Chapecó, SC",desc:"Verdão do Oeste."}
+    ];
+
+    function escudo(clube) {
+      return "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Brazil%20-%20Serie%20A/" +
+        clube.sigla + ".png";
+    }
+
+    function saldo(clube) {
+      const n = clube.gp - clube.gc;
+      return n > 0 ? "+" + n : String(n);
+    }
+
+    const corpo = document.getElementById("classificacao");
+    const grade = document.getElementById("timesGrid");
+    const busca = document.getElementById("busca");
+
+    function renderizarTabela(filtro = "") {
+      corpo.innerHTML = "";
+
+      clubes.forEach((c, i) => {
+        if (!c.nome.toLowerCase().includes(filtro.toLowerCase())) return;
+
+        const tr = document.createElement("tr");
+        if (i === 0) tr.classList.add("lider-row");
+        if (i < 4) tr.classList.add("zona-libertadores");
+        else if (i < 6) tr.classList.add("zona-sula");
+        else if (i >= 16) tr.classList.add("zona-z4");
+
+        tr.innerHTML = `
+          <td class="posicao">${i + 1}</td>
+          <td><div class="time">
+            <img class="escudo" src="${escudo(c)}" alt=""
+                 onerror="this.style.display='none'">
+            <span>${c.nome}</span>
+          </div></td>
+          <td class="pontos">${c.pts}</td>
+          <td>${c.j}</td><td>${c.v}</td><td>${c.e}</td>
+          <td>${c.d}</td><td>${c.gp}</td><td>${c.gc}</td>
+          <td>${saldo(c)}</td>`;
+        corpo.appendChild(tr);
+      });
+    }
+
+    function mostrarDetalhes(c, i) {
+      const painel = document.getElementById("detalhes");
+      painel.innerHTML = `
+        <div class="detalhe-cabecalho">
+          <img src="${escudo(c)}" alt="Escudo do ${c.nome}"
+               onerror="this.style.visibility='hidden'">
+          <div>
+            <h3>${i + 1}º lugar — ${c.nome}</h3>
+            <span>${c.cidade}</span>
+          </div>
+        </div>
+        <p>${c.desc}</p>
+        <p>
+          <strong>${c.pts} pontos</strong> · ${c.j} jogos ·
+          ${c.v} vitórias · ${c.e} empates · ${c.d} derrotas.<br>
+          Gols marcados: ${c.gp} · Gols sofridos: ${c.gc} ·
+          Saldo: ${saldo(c)}.
+        </p>`;
+      painel.classList.add("aberto");
+      painel.scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+
+    function renderizarClubes() {
+      clubes.forEach((c, i) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "time-card";
+        card.innerHTML = `
+          <img src="${escudo(c)}" alt=""
+               onerror="this.style.visibility='hidden'">
+          <span><strong>${c.nome}</strong>
+          <small>${i + 1}º lugar · ${c.pts} pontos</small></span>`;
+        card.addEventListener("click", () => mostrarDetalhes(c, i));
+        grade.appendChild(card);
+      });
+    }
+
+    const lider = clubes[0];
+    document.getElementById("escudoLider").src = escudo(lider);
+    document.getElementById("nomeLider").textContent = lider.nome;
+    document.getElementById("pontosLider").textContent = lider.pts;
+    document.getElementById("jogosLider").textContent = lider.j;
+    document.getElementById("vitoriasLider").textContent = lider.v;
+    document.getElementById("saldoLider").textContent = saldo(lider);
+
+    busca.addEventListener("input", () => renderizarTabela(busca.value));
+
+    renderizarTabela();
+    renderizarClubes();
+  </script>
 </body>
 </html>
